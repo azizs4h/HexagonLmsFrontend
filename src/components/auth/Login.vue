@@ -27,6 +27,7 @@
                 v-model="mail"
                 label="Kullanıcı Adı"
                 :rules="isimRules"
+                required
             ></v-text-field>
           </v-row>
         <v-row>
@@ -39,6 +40,7 @@
                 label="Parola"
                 :rules="parolaRules"
                 @click:append="show1 = !show1"
+                required
             ></v-text-field>
         </v-row>
         <v-row>
@@ -48,15 +50,13 @@
                 @click="login"
                 :elevation="5"
                 color="blue darken-1"
-                :class="{'disable' : form.invalid}"
+                :class="{'disable-events': valid}"
             >
             GİRİŞ
             </v-btn>
           </v-col>
-
         </v-row>
     </v-form>
-
     </v-card>
   </v-container>
 
@@ -93,7 +93,7 @@ export default {
             this.error = error;
       })
     },
-  }
+  },
 }
 </script>
 
