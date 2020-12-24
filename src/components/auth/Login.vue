@@ -50,7 +50,6 @@
                 @click="login"
                 :elevation="5"
                 color="blue darken-1"
-                :class="{'disable-events': valid}"
             >
             GİRİŞ
             </v-btn>
@@ -58,17 +57,17 @@
         </v-row>
     </v-form>
     </v-card>
+
   </v-container>
 
 </template>
 
 <script>
 
-
 export default {
   name: "Login",
   data: () =>({
-    valid: false,
+    valid: true,
     show1: false,
     mail : '',
     password: '',
@@ -76,24 +75,30 @@ export default {
       v => !!v || 'Kullanıcı adı gereklidir.',
     ],
     parolaRules:[
-        v => (v && v.length <=10) || 'Parola 8 ila 10 karakter arasında olmalıdır.'
+        v => (v && v.length <=10 && v.length >=8) || 'Parola 8 ila 10 karakter arasında olmalıdır.'
     ]
   }),
 
   methods:{
     login(){
-      this.$http.post("token/",{username: this.mail, email: '', password: this.password})
-          .then((response) => {
-            console.log(response.status)
-            if(response.status==200)
+      if(!this.$refs.form.validate()){
+        return
+      }
+      else{
+        this.$http.post("token/",{username: this.mail, email: '', password: this.password})
+            .then((response) => {
+              console.log(response.status)
+              if(response.status==200)
                 this.$router.push("/anasayfa")
-      })
-          .catch(error => {
-        //console.error("kanka burası hata kısmı ama badelicem az kaldı"+error);
-            this.error = error;
-      })
+            })
+            .catch(error => {
+              //console.error("kanka burası hata kısmı ama badelicem az kaldı"+error);
+              this.error = error;
+            })
+      }
     },
   },
+
 }
 </script>
 
