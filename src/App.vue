@@ -2,7 +2,7 @@
   <v-app>
       <Header v-if="$route.path !== '/login'"></Header>
       <v-main>
-        <v-container fluid>
+        <v-container fluid class="pa-0">
           <router-view></router-view>
         </v-container>
       </v-main>
@@ -23,7 +23,9 @@ export default {
     Header,
     Footer
   },
-
+  created() {
+    this.$store.dispatch("initAuth");
+  },
   data: () => ({
     //
   }),

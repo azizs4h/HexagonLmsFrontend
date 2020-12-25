@@ -1,7 +1,7 @@
 <template>
 
-  <v-content class="ma-auto" style="max-width: 70%;">
-      <v-row class="ma-4 justify-center">
+  <v-main>
+      <v-row>
         <v-col sm="8" md="4" lg="3" xl="2" v-for="item in dersler" :key="(item.isim)">
           <v-card to="">
 
@@ -17,7 +17,7 @@
           </v-card>
         </v-col>
       </v-row>
-  </v-content>
+  </v-main>
 
 
 </template>

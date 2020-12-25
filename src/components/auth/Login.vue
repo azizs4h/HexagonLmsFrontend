@@ -40,6 +40,7 @@
                 label="Parola"
                 :rules="parolaRules"
                 @click:append="show1 = !show1"
+                @keypress.enter="login"
                 required
             ></v-text-field>
         </v-row>
@@ -81,20 +82,13 @@ export default {
 
   methods:{
     login(){
-      if(!this.$refs.form.validate()){
-        return
-      }
-      else{
-        this.$http.post("token/",{username: this.mail, email: '', password: this.password})
-            .then((response) => {
-              console.log(response.status)
-              if(response.status==200)
-                this.$router.push("/anasayfa")
-            })
-            .catch(error => {
-              //console.error("kanka burası hata kısmı ama badelicem az kaldı"+error);
-              this.error = error;
-            })
+      if(this.$refs.form.validate()){
+
+        this.$store.dispatch("login",{mail: this.mail, password: this.password})
+        .then(response => {
+          this.$router.push("/");
+        })
+
       }
     },
   },

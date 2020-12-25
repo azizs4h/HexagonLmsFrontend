@@ -1,18 +1,43 @@
 <template>
     <div>
-    <v-navigation-drawer
+    <v-card>
+      <v-navigation-drawer
+          app
+          v-model="drawer"
+          clipped
+          :mini-variant.sync="mini"
+          permanent
+          class="elevation-5"
+      >
+        <v-list
+            dense
+            nav
+        >
+          <v-divider/>
+          <v-list-item to="/">
+            <v-list-item-action>
+              <v-icon>mdi-home-city</v-icon>
+            </v-list-item-action>
+
+            <v-list-item-title>
+              Anasayfa
+            </v-list-item-title>
+          </v-list-item>
+
+        </v-list>
+      </v-navigation-drawer>
+    </v-card>
+
+    <v-app-bar
         app
-        v-model="drawer"
-        clipped
-        floating
-        temporary
-        class="elevation-5"
+        clipped-left
     >
-      <v-list dense>
-        <v-list-item class="px-2">
+      <v-app-bar-nav-icon style="margin: 0 0 0 10px;" @click="mini=!mini"/>
+      <v-toolbar-title>
+        <v-list-item class="px-2" to="/">
           <v-list-item-avatar>
             <v-img
-                   :src="require('../../assets/img/logo1.png')"
+                :src="require('../../assets/img/logo1.png')"
             />
           </v-list-item-avatar>
 
@@ -20,33 +45,6 @@
             Hexagon Lms
           </v-list-item-title>
         </v-list-item>
-
-        <v-divider/>
-        <v-list-item to="/">
-          <v-list-item-action>
-            <v-icon>mdi-home-city</v-icon>
-          </v-list-item-action>
-
-          <v-list-item-title>
-                Anasayfa
-            </v-list-item-title>
-        </v-list-item>
-
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-app-bar
-        app
-        clipped-left
-    >
-      <v-app-bar-nav-icon style="margin: 0 0 0 10px;" @click="drawer=!drawer"/>
-      <v-toolbar-title>
-        <v-list-item to="/">
-            <span class="title">
-           Hexagon Lms
-             </span>
-        </v-list-item>
-
       </v-toolbar-title>
       <v-spacer/>
       <v-btn class="ma-1" icon>
@@ -125,8 +123,8 @@
                     </v-icon>
 
                   </v-list-item-action>
-                  <v-list-item-title>
-                    Çıkış
+                  <v-list-item-title @click="logout()">
+                      Çıkış
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -144,11 +142,17 @@
     name: "Header",
 
     data: () => ({
-      menu: false,
-      tema: "Açık",
+      menu : false,
+      tema : "Açık",
+      mini : true,
       changetheme: false,
       drawer: false,
     }),
+    methods : {
+      logout(){
+        this.$store.dispatch("logout");
+      }
+    },
     watch:{
       changetheme: function (next){
         this.$vuetify.theme.dark=next;
