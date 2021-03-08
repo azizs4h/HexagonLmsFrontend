@@ -47,11 +47,7 @@
         </v-list-item>
       </v-toolbar-title>
       <v-spacer/>
-      <v-btn class="ma-1" icon>
-        <v-icon>
-          mdi-apps
-        </v-icon>
-      </v-btn>
+
       <div>
         <v-menu
         :model="menu"
@@ -60,28 +56,29 @@
         offset-y
         >
           <template v-slot:activator="{on}">
-            <v-avatar size="40">
-
-              <v-img v-on="on"
-              :src="require('../../assets/img/avatar.png')"
-              >
-
-              </v-img>
-            </v-avatar>
+          <v-col style="cursor: pointer;" v-on="on">
+            <v-row>
+              <v-avatar size="40">
+                <v-img :src="require('../../assets/img/avatar.png')"></v-img>
+              </v-avatar>
+                <h4 v-if="userInfo !== ''" style="line-height: 40px;padding-left: 10px;user-select: none;">{{userInfo.student_user.name}}</h4>
+            </v-row>
+          </v-col>
 
           </template>
           <v-card>
             <v-list>
-
+              <v-list-item-group>
               <v-list-item>
                 <v-list-item-avatar>
                   <v-img
                          :src="require('../../assets/img/avatar.png')"
                   />
+
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>
-                    Kullanıcı Adı
+                  <v-list-item-title v-if="userInfo !== ''">
+                    {{userInfo.student_user.name}}
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -116,18 +113,24 @@
                 </v-list-item>
                 <v-divider></v-divider>
                 <v-list-item>
-                  <v-list-item-action>
+
+                  <v-list-item-icon>
                     <v-icon
                     large >
                       mdi-exit-to-app
                     </v-icon>
 
-                  </v-list-item-action>
-                  <v-list-item-title @click="logout()">
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title @click="logout()">
                       Çıkış
-                  </v-list-item-title>
+                    </v-list-item-title>
+                  </v-list-item-content>
+
+
                 </v-list-item>
               </v-list>
+              </v-list-item-group>
             </v-list>
           </v-card>
 
@@ -138,20 +141,38 @@
 </template>
 
 <script>
+  import axios from "axios";
+
   export default {
     name: "Header",
 
     data: () => ({
+      url : 'http://localhost:8000/user/info/',
       menu : false,
       tema : "Açık",
       mini : true,
       changetheme: false,
       drawer: false,
+      userInfo: '',
     }),
     methods : {
+
       logout(){
         this.$store.dispatch("logout");
       }
+    },
+    created(){
+      axios.get(this.url, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
+        },
+      }).then((res) => {
+        this.userInfo = res.data
+        console.log(this.userInfo)
+      })
+          .catch((error) => {
+            console.error(error)
+          })
     },
     watch:{
       changetheme: function (next){

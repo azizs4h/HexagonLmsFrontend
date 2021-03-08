@@ -1,12 +1,12 @@
 <template>
   <v-app>
-      <Header v-if="$route.path !== '/login'"></Header>
+      <Header v-if="$store.getters.isAuthenticated"></Header>
       <v-main>
-        <v-container fluid class="pa-0">
+        <v-container class="pa-16">
           <router-view></router-view>
         </v-container>
       </v-main>
-      <Footer v-if="$route.path !== '/login'"></Footer>
+      <Footer v-if="$store.getters.isAuthenticated !== '/login'"></Footer>
 
   </v-app>
 </template>

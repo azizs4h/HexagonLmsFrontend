@@ -19,7 +19,7 @@ const store = new Vuex.Store({
             state.refreshToken = token;
         },
         clearToken(state){
-            state.accessToken = '';
+            state.accessToken = "";
         }
     },
     actions : {
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
             }
         },
         login( {commit, dispatch, state}, authData){
-            let link = "http://localhost:8000/lmsApi/token/"
+            let link = "http://localhost:8000/user/login/"
             return axios.post(link,{username: authData.mail, email: '', password: authData.password})
                 .then((response) => {
                     //console.log(response)
