@@ -8,14 +8,15 @@
         >
           <v-card
               outlined
-              elevation="5"
+              elevation="1"
               class="px-10"
+              min-height="300px"
           >
             <br>
             <v-card-title>DERS BİLGİLERİ</v-card-title>
             <v-card-text v-if="info !== null">
               <ul>
-                <h3>  Ders Kredisi : {{info.lesson}}</h3><br>
+                <h3>  Ders Kredisi : {{info.lesson.lesson_credit}}</h3><br>
                 <h3>  Ders Adı :  {{info.lesson.name}}</h3><br>
                 <h3>  Ders Kodu: {{info.lesson.lesson_code}}</h3><br>
               </ul>
@@ -28,8 +29,9 @@
         >
           <v-card
           outlined
-          elevation="5"
+          elevation="1"
           class="px-10"
+          min-height="300px"
           >
             <br>
             <v-card-title>DERS OKUTMANI</v-card-title>
@@ -48,11 +50,7 @@
 
             </v-card-text>
           </v-card>
-
         </v-col>
-
-
-
       </v-row>
 
     </v-container>
@@ -77,8 +75,8 @@ export default {
 
     axios.post(this.url, {'id': this.$props.id}, {headers})
         .then((res) => {
-          this.info = res.data
-          console.error(this.info)
+          this.info = res.data[0]
+          console.log(this.info)
         })
         .catch((error) => {
           console.error(error)

@@ -16,7 +16,7 @@
                   v-bind="attrs"
                   v-on="on"
               >
-                Note Ekle
+                Not Ekle
               </v-btn>
             </template>
             <v-form
@@ -206,16 +206,4 @@ export default {
   },
 }
 
-
 </script>
-
-<style scoped>
-
-.card {
-  /* the other rules */
-  transition: height 0.3s, box-shadow 0.3s;
-}
-.card:hover {
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.5);
-}
-</style>
