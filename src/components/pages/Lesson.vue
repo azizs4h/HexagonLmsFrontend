@@ -24,7 +24,7 @@
       <v-tabs-items v-model="tab">
         <online-lesson></online-lesson>
         <notes :id=lesson.item.id></notes>
-        <lesson-info :lesson=lesson ></lesson-info>
+        <lesson-info :id=lesson.item.id ></lesson-info>
         <lesson-records></lesson-records>
       </v-tabs-items>
 

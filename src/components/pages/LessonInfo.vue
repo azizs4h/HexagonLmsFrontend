@@ -6,7 +6,6 @@
         <v-col
             class="mx-5 my-5"
         >
-
           <v-card
               outlined
               elevation="5"
@@ -14,11 +13,11 @@
           >
             <br>
             <v-card-title>DERS BİLGİLERİ</v-card-title>
-            <v-card-text>
+            <v-card-text v-if="info !== null">
               <ul>
-                <h3>  Ders Kredisi : {{lesson.item.lesson_credit}}</h3><br>
-                <h3>  Ders Adı :  {{lesson.item.name}}</h3><br>
-                <h3>  Ders Kodu: {{lesson.item.lesson_code}}</h3><br>
+                <h3>  Ders Kredisi : {{info.lesson}}</h3><br>
+                <h3>  Ders Adı :  {{info.lesson.name}}</h3><br>
+                <h3>  Ders Kodu: {{info.lesson.lesson_code}}</h3><br>
               </ul>
             </v-card-text>
           </v-card>
@@ -40,11 +39,11 @@
                 class="float-right"
                 :src="require('@/assets/img/avatar.png')">
             </v-img>
-            <v-card-text>
+            <v-card-text v-if="info !== null">
               <ul>
-                <h3>Adı :</h3><br>
-                <h3>SOYADI :</h3><br>
-                <h3>E-Posta :</h3><br>
+                <h3>Adı : {{info.teacher.name}}</h3><br>
+                <h3>SOYADI : {{info.teacher.surname}}</h3><br>
+                <h3>E-Posta : {{info.teacher.email}}</h3><br>
               </ul>
 
             </v-card-text>
@@ -61,19 +60,30 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  props: ['lesson'],
-  name: "LessonInfo"
+  props: ['id'],
+  name: "LessonInfo",
+  data: () => ({
+    url : 'http://localhost:8000/lessons/info/',
+    info : null,
+  }),
+  mounted(){
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
+    }
+
+    axios.post(this.url, {'id': this.$props.id}, {headers})
+        .then((res) => {
+          this.info = res.data
+          console.error(this.info)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+
+  },
 }
 </script>
-
-<style scoped>
-
-.card {
-  /* the other rules */
-  transition: height 0.3s, box-shadow 0.3s;
-}
-.card:hover {
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.5);
-}
-</style>
