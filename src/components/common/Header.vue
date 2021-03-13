@@ -61,7 +61,9 @@
               <v-avatar size="40">
                 <v-img :src="require('../../assets/img/avatar.png')"></v-img>
               </v-avatar>
-                <h4 v-if="userInfo !== ''" style="line-height: 40px;padding-left: 10px;user-select: none;">{{userInfo.student_user.name}}</h4>
+                <h4 v-if="userInfo !== '' && userInfo.student_user !== null" style="line-height: 40px;padding-left: 10px;user-select: none;">{{userInfo.student_user.name}}</h4>
+                <h4 v-else-if="userInfo !== '' && userInfo.teacher_user !== null" style="line-height: 40px;padding-left: 10px;user-select: none;">{{userInfo.teacher_user.name}}</h4>
+
             </v-row>
           </v-col>
 
@@ -77,8 +79,11 @@
 
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-if="userInfo !== ''">
+                  <v-list-item-title v-if="userInfo !== '' && userInfo.student_user !== null">
                     {{userInfo.student_user.name}}
+                  </v-list-item-title>
+                  <v-list-item-title v-else-if="userInfo !== '' && userInfo.teacher_user !== null">
+                    {{userInfo.teacher_user.name}}
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -122,7 +127,7 @@
 
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title @click="logout()">
+                    <v-list-item-title @click="logout">
                       Çıkış
                     </v-list-item-title>
                   </v-list-item-content>
@@ -156,7 +161,6 @@
       userInfo: '',
     }),
     methods : {
-
       logout(){
         this.$store.dispatch("logout");
       }
@@ -168,7 +172,12 @@
         },
       }).then((res) => {
         this.userInfo = res.data
-        console.log(this.userInfo)
+        localStorage.setItem('is_student', res.data.is_student)
+        if(res.data.teacher_user !== null)
+          localStorage.setItem('user_id', res.data.teacher_user.id)
+        else
+          localStorage.setItem('user_id', res.data.student_user.id)
+        console.error(localStorage.getItem('is_student'))
       })
           .catch((error) => {
             console.error(error)

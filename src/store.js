@@ -20,12 +20,13 @@ const store = new Vuex.Store({
         },
         clearToken(state){
             state.accessToken = "";
+            state.refreshToken = "";
         }
     },
     actions : {
         initAuth({commit}){
             let Access_Token = localStorage.getItem("Access-Token");
-            if(Access_Token){
+            if(Access_Token && Access_Token !==''){
                 commit("setAccessToken", Access_Token);
                 router.push("/");
             }else{
@@ -37,7 +38,6 @@ const store = new Vuex.Store({
             let link = "http://localhost:8000/user/login/"
             return axios.post(link,{username: authData.mail, email: '', password: authData.password})
                 .then((response) => {
-                    //console.log(response)
                     commit("setAccessToken", response.data.access);
                     commit("setRefreshToken", response.data.refresh);
                     localStorage.setItem("Access-Token", response.data.access);
@@ -54,12 +54,12 @@ const store = new Vuex.Store({
             commit("clearToken");
             localStorage.removeItem("Access-Token");
             localStorage.removeItem("Refresh-Token");
-            router.replace("/login");
+            router.push("/login");
         },
         setTimeOut({dispatch}){
             setTimeout(() => {
                 dispatch("logout");
-            },3600000)
+            },2*60*60*1000)//     2 hours
         }
     },
     getters : {

@@ -1,57 +1,52 @@
 <template>
-<v-container>
-  <v-card>
-    <v-card-title class="text-center justify-center py-6">
-      <h1 class="font-weight-bold display-3 basil--text">
-        {{lesson.item.name}}
-      </h1>
-    </v-card-title>
+  <v-container>
+    <v-card>
+      <v-card-title class="text-center justify-center py-6">
+        <h4 class="font-weight-bold display-2">
+          {{ lesson.item.name }}
+        </h4>
+      </v-card-title>
 
-    <v-tabs
-        v-model="tab"
-        background-color="transparent"
-        color="basil"
-        grow
-    >
-      <v-tab
-          v-for="item in items"
-          :key="item"
+      <v-tabs
+          v-model="tab"
+          background-color="transparent"
+          grow
+          color="blue darken-1"
       >
-        {{ item }}
-      </v-tab>
-    </v-tabs>
-
-    <v-tabs-items v-model="tab">
-      <v-tab-item
-          v-for="item in items"
-          :key="item"
-      >
-        <v-card
-            color="basil"
-            flat
+        <v-tab
+            v-for="(item, key) in items"
+            :key="key"
         >
-          <v-card-text>{{ text }}</v-card-text>
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
-    <pre>
-      pre la burası
-      {{lesson}}
-    </pre>
-  </v-card>
-</v-container>
+          {{ item }}
+        </v-tab>
+      </v-tabs>
+  <hr>
+      <v-tabs-items v-model="tab">
+        <online-lesson></online-lesson>
+        <notes :id=lesson.item.id></notes>
+        <lesson-info :lesson=lesson ></lesson-info>
+        <lesson-records></lesson-records>
+      </v-tabs-items>
+
+    </v-card>
+  </v-container>
 </template>
 
 <script>
+import OnlineLesson from "@/components/pages/OnlineLesson";
+import Notes from "@/components/pages/Notes";
+import LessonInfo from "@/components/pages/LessonInfo";
+import LessonRecords from "@/components/pages/LessonRecords";
 export default {
-  data () {
+  components: {LessonRecords, LessonInfo, Notes, OnlineLesson},
+
+  data() {
     return {
       tab: null,
       items: [
-        'Canlı Ders', 'Notlar & Duyurular',
+        'Canlı Ders', 'Notlar & Duyurular', 'Ders Bilgileri', 'Ders Kayıtları'
       ],
-      lesson : this.$route.params,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      lesson: this.$route.params,
     }
   },
 }

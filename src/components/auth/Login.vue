@@ -1,5 +1,6 @@
 <template>
-  <v-container style="height: 100vh" class="fill-height container--fluid">
+
+  <v-container style="height: 96vh" class="fill-height container--fluid back">
     <v-card
         class="mx-auto my-auto px-5 pa-sm-12 elevation-10"
     >
@@ -97,5 +98,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

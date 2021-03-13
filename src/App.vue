@@ -1,14 +1,15 @@
 <template>
+
   <v-app>
-      <Header v-if="$store.getters.isAuthenticated"></Header>
+    <Header v-if="$store.getters.isAuthenticated"></Header>
       <v-main>
-        <v-container class="pa-16">
+        <v-container>
           <router-view></router-view>
         </v-container>
       </v-main>
-      <Footer v-if="$store.getters.isAuthenticated !== '/login'"></Footer>
-
+      <Footer v-if="$store.getters.isAuthenticated"></Footer>
   </v-app>
+
 </template>
 
 <script>
