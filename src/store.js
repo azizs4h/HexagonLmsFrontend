@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         accessToken : "",
         refreshToken : "",
         error : "",
+        link : "http://localhost:7000"
     },
     mutations: {
         setAccessToken(state, token){
@@ -35,7 +36,7 @@ const store = new Vuex.Store({
             }
         },
         login( {commit, dispatch, state}, authData){
-            let link = "http://localhost:8000/user/login/"
+            let link = store.getters.url+"/user/login/"
             return axios.post(link,{username: authData.mail, email: '', password: authData.password})
                 .then((response) => {
                     commit("setAccessToken", response.data.access);
@@ -65,6 +66,9 @@ const store = new Vuex.Store({
     getters : {
         isAuthenticated(state){
             return state.accessToken !==""
+        },
+        url(state){
+            return state.link
         }
     }
 })

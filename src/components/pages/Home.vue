@@ -26,7 +26,7 @@ import axios from "axios";
 export default {
 name: "Home",
   data: () =>({
-    url : 'http://localhost:8000/lessons/',
+    url : '',
     lessons : null,
     user_id : localStorage.getItem('user_id')
   }),
@@ -36,6 +36,7 @@ name: "Home",
     },
   },
   mounted(){
+    this.url= this.$store.getters.url+'/lessons/'
 
     const headers = {
       'Content-Type': 'application/json',
@@ -48,6 +49,7 @@ name: "Home",
         console.log(this.lessons)
       })
         .catch((error) => {
+          console.log("sanırımı buırada hata var"+this.user_id)
           console.error(error)
         })
 

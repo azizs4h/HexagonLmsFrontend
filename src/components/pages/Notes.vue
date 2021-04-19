@@ -1,7 +1,7 @@
 <template>
   <v-tab-item>
     <v-container>
-      <v-row v-if="student"
+      <v-row v-if="student == 'false'"
              class="ma-auto px-10 justify-end"
       >
           <v-dialog
@@ -116,6 +116,7 @@
                 outlined
             >
               <v-btn
+                  v-if="student == 'false'"
                   elevation="1"
                   icon
                   large
@@ -138,6 +139,7 @@
                   <v-list-item-title>
                     <h3>
                       {{item.note_title}}
+                      {{student}}
                     </h3>
                   </v-list-item-title>
                   &emsp;
@@ -167,10 +169,10 @@ export default {
   props: ['id'],
   name: "Notes",
   data: () =>({
-    url : 'http://localhost:8000/lessons/notes/',
+    url : '',
     notes : null,
     valid : true,
-    student : null,
+    student: localStorage.getItem('is_student'),
     dialog: false,
     noteRule: [
       v => !!v || 'Bu alan gereklidir.',
@@ -180,15 +182,13 @@ export default {
     saveNote(){
       if(this.$refs.form.validate()){
         alert("kanki ? ")
-
         this.dialog = false
       }
-    }
+    },
   },
-  beforeMount(){
-    this.student = localStorage.getItem('is_student')
-  },
+
   mounted(){
+    this.url= this.$store.getters.url+'/lessons/notes/'
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`

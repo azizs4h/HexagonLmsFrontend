@@ -152,7 +152,7 @@
     name: "Header",
 
     data: () => ({
-      url : 'http://localhost:8000/user/info/',
+      url : '',
       menu : false,
       tema : "Açık",
       mini : true,
@@ -166,6 +166,7 @@
       }
     },
     created(){
+      this.url= this.$store.getters.url+'/user/info/'
       axios.get(this.url, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
@@ -177,7 +178,6 @@
           localStorage.setItem('user_id', res.data.teacher_user.id)
         else
           localStorage.setItem('user_id', res.data.student_user.id)
-        console.error(localStorage.getItem('is_student'))
       })
           .catch((error) => {
             console.error(error)

@@ -64,10 +64,11 @@ export default {
   props: ['id'],
   name: "LessonInfo",
   data: () => ({
-    url : 'http://localhost:8000/lessons/info/',
+    url : '',
     info : null,
   }),
   mounted(){
+    this.url= this.$store.getters.url+'/lessons/info/'
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
