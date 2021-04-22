@@ -5,22 +5,11 @@ import Login from "@/components/auth/Login";
 import Home from "@/components/pages/Home";
 import Lesson from "@/components/pages/Lesson";
 import NotFoundComponent from "@/components/common/NotFoundComponent";
-import * as path from "path";
-
 Vue.use(VueRouter);
 
 
 export const router = new VueRouter({
     routes:[
-        {
-            path: '*',
-            name: 'notFound',
-            component: NotFoundComponent,
-            meta: {
-                requiresAuth : true,
-                title : 'Böyle bir şey yok'
-            }
-        },
         {
             path : '/',
             component: Home,
@@ -48,7 +37,15 @@ export const router = new VueRouter({
                 requiresAuth : true,
                 title: 'Dersler'
             }
-        }
+        },
+        {
+            path: '*',
+            name: 'notFound',
+            component: NotFoundComponent,
+            meta: {
+                title : 'Böyle bir şey yok'
+            }
+        },
         //{path : '', component: Login}
     ],
     mode: 'history' //varsayılan hash "linki arasında diyezi kaldırıyor"
@@ -61,13 +58,10 @@ router.beforeEach((to, from, next) => {
 
         if (!store.getters.isAuthenticated) { // burdan patlıyoruz
             console.log(" otontike kıksmı")
-            next({
-                path: '/login',
-            })
-
+            next({name:Login})
         } else {
             console.log(" otontike else  kıksmı")
-            next()
+            next({name:Home})
         }
     }else {
         console.log("require auth else  kıksmı")

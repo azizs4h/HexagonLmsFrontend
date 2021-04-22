@@ -74,7 +74,7 @@ export default {
       'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
     }
 
-    axios.post(this.url, {'id': this.$props.id}, {headers})
+    axios.get(this.url+this.$props.id,{headers})
         .then((res) => {
           this.info = res.data[0]
           console.log(this.info)

@@ -121,6 +121,7 @@
                   icon
                   large
                   class="float-right"
+                  @click="deleteNote(item.id)"
               >
                 <v-icon>
                   mdi-delete
@@ -139,7 +140,6 @@
                   <v-list-item-title>
                     <h3>
                       {{item.note_title}}
-                      {{student}}
                     </h3>
                   </v-list-item-title>
                   &emsp;
@@ -157,8 +157,28 @@
             </v-card>
           </v-col>
       </v-row>
-
     </v-container>
+    <v-snackbar
+        transition="scroll-x-reverse-transition"
+        v-model="snackbar"
+        :timeout="timeout"
+        :vertical="true"
+        top
+        right
+        color="blue-gray"
+        elevation="24"
+    >
+      Not & Duyuru Silindi.
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+            v-bind="attrs"
+            @click="snackbar = false"
+        >
+          <v-icon>mdi-close-circle-outline</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-tab-item>
 </template>
 
@@ -174,6 +194,8 @@ export default {
     valid : true,
     student: localStorage.getItem('is_student'),
     dialog: false,
+    snackbar: false,
+    timeout: 3000,
     noteRule: [
       v => !!v || 'Bu alan gereklidir.',
     ],
@@ -185,6 +207,27 @@ export default {
         this.dialog = false
       }
     },
+    deleteNote(id){
+      this.url= this.$store.getters.url+'/lessons/notes/delete/'
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`,
+      }
+      this.snackbar = !this.snackbar
+      axios.delete(this.url+id,{headers})
+          .then((res) => {
+            if(res.status == 200){
+              this.notes.forEach((value,index) => {
+                if(value.id==id){
+                  this.notes.splice(index, 1)
+                }
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      },
   },
 
   mounted(){
@@ -194,7 +237,7 @@ export default {
       'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
     }
 
-    axios.post(this.url, {'id': this.$props.id}, {headers})
+    axios.get(this.url+this.$props.id,{headers})
         .then((res) => {
       this.notes = res.data
       console.log(this.notes)
@@ -207,3 +250,6 @@ export default {
 }
 
 </script>
+
+
+

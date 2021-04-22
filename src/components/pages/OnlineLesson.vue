@@ -8,7 +8,7 @@
           class="my-3 mx-auto card"
           max-width="90%"
           outlined
-          to="/"
+          to="*"
       >
         <v-list-item>
           <v-list-item-avatar>

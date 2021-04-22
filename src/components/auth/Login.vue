@@ -87,7 +87,12 @@ export default {
 
         this.$store.dispatch("login",{mail: this.mail, password: this.password})
         .then(response => {
-          this.$router.push("/");
+          if(response != 401)
+            this.$router.push("/").catch(()=>{});
+          else
+            this.$router.push("/login").catch(()=>{});
+        }).catch(error =>{
+
         })
 
       }

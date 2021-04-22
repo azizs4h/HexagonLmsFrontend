@@ -4,12 +4,11 @@ import vuetify from './plugins/vuetify';
 import Vuelidate from "vuelidate/src";
 import { router } from "./router" //değişken geleceği için kırlangıç içinde
 import store from "./store"
-
+import axios from "axios";
 Vue.config.productionTip = false
 
 
 Vue.use(Vuelidate);
-
 
 new Vue({
   vuetify,
