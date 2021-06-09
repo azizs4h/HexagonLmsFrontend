@@ -53,8 +53,7 @@ const store = new Vuex.Store({
         },
         logout({commit}){
             commit("clearToken");
-            localStorage.removeItem("Access-Token");
-            localStorage.removeItem("Refresh-Token");
+            localStorage.clear();
             router.push("/login");
         },
         setTimeOut({dispatch}){

@@ -3,8 +3,6 @@ import VueRouter from "vue-router";
 import store from './store'
 import Login from "@/components/auth/Login";
 import Home from "@/components/pages/Home";
-import Lesson from "@/components/pages/Lesson";
-import NotFoundComponent from "@/components/common/NotFoundComponent";
 Vue.use(VueRouter);
 
 
@@ -29,8 +27,8 @@ export const router = new VueRouter({
             }
         },
         {
-            path : '/lesson',
-            component: Lesson,
+            path : '/lesson/:id',
+            component: () => import("./components/pages/Lesson/Lesson"),
             props: true,
             name : 'Lesson',
             meta: {
@@ -41,31 +39,44 @@ export const router = new VueRouter({
         {
             path: '*',
             name: 'notFound',
-            component: NotFoundComponent,
+            component: () => import("./components/common/NotFoundComponent"),
             meta: {
                 title : 'Böyle bir şey yok'
             }
         },
+        {
+            path: '/online_lesson',
+            name: 'meet',
+            component: () => import("./components/pages/Lesson/meet-jitsi"),
+            meta: {
+                title : 'Toplantı'
+            }
+        },
+        {
+            path: '/end',
+            name: 'end',
+            component: () => import("./components/pages/Lesson/OnlineLessonEnd"),
+            meta: {
+                title : 'Ders Bitti'
+            }
+        },
         //{path : '', component: Login}
     ],
-    mode: 'history' //varsayılan hash "linki arasında diyezi kaldırıyor"
+    mode: 'hash' //varsayılan hash "linki arasında diyezi kaldırıyor"
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
-
-        if (!store.getters.isAuthenticated) { // burdan patlıyoruz
-            console.log(" otontike kıksmı")
-            next({name:Login})
+router.beforeResolve((to, from, next) => {
+    let isAuthenticated = localStorage.getItem("Access-Token");
+    if (to.matched.some(r => r.meta.requiresAuth)) {
+        if (isAuthenticated === '') {
+            next({name: Login});
         } else {
-            console.log(" otontike else  kıksmı")
-            next({name:Home})
+            next();
         }
-    }else {
-        console.log("require auth else  kıksmı")
-        next()
+    } else {
+        next({
+            name: Login
+        });
     }
 })
 

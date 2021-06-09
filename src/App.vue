@@ -1,9 +1,9 @@
 <template>
 
-  <v-app>
+  <v-app >
     <Header v-if="$store.getters.isAuthenticated"></Header>
       <v-main>
-        <v-container>
+        <v-container style="max-width: 1200px">
           <router-view></router-view>
         </v-container>
       </v-main>
@@ -32,3 +32,10 @@ export default {
   }),
 };
 </script>
+
+<style>
+.v-application a{
+
+}
+
+</style>

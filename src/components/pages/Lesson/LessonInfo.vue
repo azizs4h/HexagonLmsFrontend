@@ -76,7 +76,7 @@ export default {
 
     axios.get(this.url+this.$props.id,{headers})
         .then((res) => {
-          this.info = res.data[0]
+          this.info = res.data
           console.log(this.info)
         })
         .catch((error) => {

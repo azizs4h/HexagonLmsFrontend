@@ -1,50 +1,24 @@
 <template>
-    <div>
-    <v-card>
-      <v-navigation-drawer
-          app
-          v-model="drawer"
-          clipped
-          :mini-variant.sync="mini"
-          permanent
-          class="elevation-5"
-      >
-        <v-list
-            dense
-            nav
-        >
-          <v-divider/>
-          <v-list-item to="/">
-            <v-list-item-action>
-              <v-icon>mdi-home-city</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-title>
-              Anasayfa
-            </v-list-item-title>
-          </v-list-item>
-
-        </v-list>
-      </v-navigation-drawer>
-    </v-card>
-
+  <v-container>
     <v-app-bar
         app
-        clipped-left
     >
-      <v-app-bar-nav-icon style="margin: 0 0 0 10px;" @click="mini=!mini"/>
       <v-toolbar-title>
-        <v-list-item class="px-2" to="/">
+        <v-list-item class="px-2" to="/" >
           <v-list-item-avatar>
             <v-img
                 :src="require('../../assets/img/logo1.png')"
             />
           </v-list-item-avatar>
 
-          <v-list-item-title>
-            Hexagon Lms
-          </v-list-item-title>
+          <v-list-item-content>
+            <v-list-item-title>
+              Hexagon Lms
+            </v-list-item-title>
+          </v-list-item-content>
+
         </v-list-item>
+
       </v-toolbar-title>
       <v-spacer/>
 
@@ -142,7 +116,7 @@
         </v-menu>
       </div>
     </v-app-bar>
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -155,7 +129,6 @@
       url : '',
       menu : false,
       tema : "Açık",
-      mini : true,
       changetheme: false,
       drawer: false,
       userInfo: '',
@@ -165,7 +138,7 @@
         this.$store.dispatch("logout");
       }
     },
-    created(){
+    beforeMount(){
       this.url= this.$store.getters.url+'/user/info/'
       axios.get(this.url, {
         headers: {
@@ -174,10 +147,16 @@
       }).then((res) => {
         this.userInfo = res.data
         localStorage.setItem('is_student', res.data.is_student)
-        if(res.data.teacher_user !== null)
+        localStorage.setItem('user_name', res.data.username)
+        if(res.data.teacher_user !== null){
           localStorage.setItem('user_id', res.data.teacher_user.id)
-        else
+          localStorage.setItem('email',res.data.teacher_user.email)
+        }
+
+      else{
           localStorage.setItem('user_id', res.data.student_user.id)
+          localStorage.setItem('email',res.data.student_user.email)
+        }
       })
           .catch((error) => {
             console.error(error)
