@@ -47,6 +47,7 @@ export const router = new VueRouter({
         {
             path: '/online_lesson',
             name: 'meet',
+            props: true,
             component: () => import("./components/pages/Lesson/meet-jitsi"),
             meta: {
                 title : 'Toplantı'

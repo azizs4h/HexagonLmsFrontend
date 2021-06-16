@@ -6,6 +6,8 @@
         <h4 class="font-weight-bold display-2">
           {{ lesson.lesson.name }}
         </h4>
+        <hr>
+        <br>
       </v-card-title>
 
       <v-tabs
@@ -23,7 +25,7 @@
       </v-tabs>
   <hr>
       <v-tabs-items v-model="tab">
-        <online-lesson></online-lesson>
+        <online-lesson :id=lesson.lesson.id></online-lesson>
         <notes :id=lesson.lesson.id></notes>
         <lesson-info :id=lesson.lesson.id ></lesson-info>
         <lesson-records></lesson-records>

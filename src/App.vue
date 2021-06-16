@@ -24,7 +24,7 @@ export default {
     Header,
     Footer
   },
-  created() {
+  beforeCreate() {
     this.$store.dispatch("initAuth");
   },
   data: () => ({

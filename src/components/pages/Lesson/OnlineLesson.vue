@@ -1,76 +1,120 @@
 <template>
   <v-tab-item>
     <v-container>
-      <v-card
-          class="my-3 mx-auto card"
-          max-width="90%"
-          outlined
-
+      <br>
+      <v-row v-if="student == 'false'"
+             class="ma-auto px-10 justify-end"
       >
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-icon
-                x-large >
-              mdi-cast-education
-            </v-icon>
-          </v-list-item-avatar>
+        <v-dialog
+            v-model="dialog"
+            persistent
+            max-width="600px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+            >
+              Ders Başlat
+            </v-btn>
+          </template>
+          <v-card>
 
-          <v-list-item-content>
-            <v-list-item-title>
-              <v-dialog
-                  v-model="dialog"
-                  persistent
-                  max-width="600px"
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                        label="Toplantı Adı"
+                        required
+                        v-model="name"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="dialog = false"
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                      color="primary"
-                      dark
-                      v-bind="attrs"
-                      v-on="on"
-                  >
-                    Ders Başlat
-                  </v-btn>
-                </template>
-                <v-card>
+                Kapat
+              </v-btn>
+              <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="createLesson()"
+              >
+                Başlat
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
 
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col>
-                          <v-text-field
-                              label="Toplantı Adı"
-                              required
-                              v-model="toplantiAdi"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="dialog = false"
-                    >
-                      Kapat
-                    </v-btn>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="createLesson()"
-                    >
-                      Başlat
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card>
+      <v-row
+          class="ma-auto px-10"
+          v-else
+      >
+        <v-row>
+          <h2 class="font-weight-bold text-center text-uppercase">
+            Canlı Ders
+          </h2>
+          <hr>
+        </v-row>
 
+        <v-col class="text-right">
+          <v-btn
+              @click="$router.push({ name: 'meet', params: { name : lesson_id} })"
+              class="text-uppercase"
+              color="primary"
+          >
+            Derse katıl
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <br>
+
+      <h2 class="font-weight-bold text-center text-uppercase">
+        Geçmİş Dersler
+      </h2>
+      <hr>
+      <br>
+
+      <v-row>
+        <v-col
+        cols="10"
+        class="mx-auto"
+        >
+          <v-card
+              class="my-3 mx-auto"
+              max-width="90%"
+              outlined
+              v-for="item in last_lesson" :key="item.id"
+          >
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-icon
+                    x-large >
+                  mdi-history
+                </v-icon>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-regular">
+                  {{item.name}}
+                </v-list-item-title>
+                <v-list-item-subtitle class="text-right">{{formatDate(item.meet_time)}}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </v-tab-item>
 </template>
@@ -80,36 +124,76 @@ import axios from "axios";
 
 export default {
   name: "OnlineLesson",
+  props: ['id'],
   data: () =>({
     dialog: false,
-    toplantiAdi: 'denemee',
+    name:'',
+    newMeet:{
+      name: '',
+      lesson: '',
+    },
+    last_lesson:'',
+    lesson_id: '',
+    student: localStorage.getItem('is_student'),
   }),
   methods: {
 
     createLesson(){
       this.dialog = false;
-      this.$router.push({ path: '/online_lesson', params: {meet: this.toplantiAdi} })
-      /*this.url= this.$store.getters.url+'/lessons/notes/'
+      this.url= this.$store.getters.url+'/meet/add/';
+      console.log(this.url);
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
       }
 
-      axios.get(this.url+this.$props.id,{headers})
+      this.newMeet.lesson = this.$props.id;
+      this.newMeet.name = this.name;
+
+      axios.post(this.url, this.newMeet,{headers})
           .then((res) => {
-
-
-
-
-
+            this.dialog = false;
+            this.$router.push({ name: 'meet', params: { name : this.name } });
           })
           .catch((error) => {
             if(error.response.status === 404)
-             console.log("ders başlatılamadı")
-          })*/
+             console.log("ders başlatılamadı");
+          })
 
+    },
+    getLesson() {
+      this.dialog = false;
+      this.url= this.$store.getters.url+'/meet/get/';
+      console.log(this.url);
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('Access-Token')}`
+      }
+
+      this.newMeet.lesson = this.$props.id;
+      this.newMeet.name = this.name;
+
+      axios.get(this.url + this.$props.id,{headers})
+          .then((res) => {
+            this.last_lesson = res.data;
+            this.lesson_id = res.data[res.data.length-1].name;
+          })
+          .catch((error) => {
+            if(error.response.status === 404)
+              console.log("ders yok");
+          })
+    },
+    formatDate(str){
+      var clock = str.substring(str.lastIndexOf("T")+1,str.lastIndexOf("T")+6);
+      var date = str.substring(0,str.lastIndexOf("T"));
+      return clock+" "+date;
     }
-  }
+
+  },
+  mounted() {
+    this.getLesson();
+  },
+
 }
 </script>
 

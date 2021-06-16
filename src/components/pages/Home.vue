@@ -82,8 +82,7 @@ name: "Home",
       })
           .catch((error) => {
             if(error.response.status === 401){
-              console.log("home 401")
-              this.$store.dispatch("logout");
+              //this.$store.dispatch("logout");
             }
             console.error(error);
             this.loading = true;

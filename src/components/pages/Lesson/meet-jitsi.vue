@@ -1,31 +1,30 @@
 <template>
-  <div
-      style="height: 90vh;"
-  >
+  <div>
+    <div
+        style="height: 90vh;"
+    >
+      <vue-jitsi-meet
+          ref="jitsiRef"
+          domain="localhost:8443/"
+          :options="jitsiOptions"
+      ></vue-jitsi-meet>
 
-    {{ $route.params.id}}
-    <vue-jitsi-meet
-        ref="jitsiRef"
-        domain="localhost:8443/"
-        :options="jitsiOptions"
-    ></vue-jitsi-meet>
 
-    <!--<iframe allow="camera; microphone; fullscreen; display-capture; autoplay" src="https://localhost:8443//deneme" style="height: 100%; width: 100%; border: 0px;"></iframe>
-  -->
+    </div>
   </div>
 </template>
 
 
 <script>
 import { JitsiMeet } from '@mycure/vue-jitsi-meet';
-import {router} from "@/router";
 
 export default {
   name: "meet-jitsi",
-  props: ['id'],
+  props: ['name'],
   data() {
     return {
       sayac: 0,
+      student: localStorage.getItem('is_student'),
     }
   },
   components: {
@@ -34,7 +33,7 @@ export default {
   computed: {
     jitsiOptions () {
       return {
-        roomName: "de  deneme dersi neme",
+        roomName: this.$route.params.name,
         noSSL: false,
         userInfo: {
           email: localStorage.getItem('email'),
@@ -52,6 +51,7 @@ export default {
           SHOW_PROMOTIONAL_CLOSE_PAGE: false,
           MOBILE_APP_PROMO: false,
           ENABLE_WELCOME_PAGE:false,
+          INVITE_ENABLED: false,
         },
         onload: this.onIFrameLoad,
       };
@@ -61,6 +61,7 @@ export default {
     onIFrameLoad() {
       this.sayac++;
       this.$refs.jitsiRef.addEventListener('readToClose', this.readyToClose(), false);
+
     },
 
     readyToClose() {
@@ -68,6 +69,9 @@ export default {
         this.$router.push({name: 'end'})
       }
     },
+    getUrl(){
+      return "https://localhost:8443/"+this.$route.params.name;
+    }
   },
   mounted(){
   }
