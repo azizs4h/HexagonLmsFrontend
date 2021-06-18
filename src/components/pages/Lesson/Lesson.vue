@@ -6,7 +6,6 @@
         <h4 class="font-weight-bold display-2">
           {{ lesson.lesson.name }}
         </h4>
-        <hr>
         <br>
       </v-card-title>
 

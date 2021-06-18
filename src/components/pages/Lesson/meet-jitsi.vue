@@ -69,9 +69,6 @@ export default {
         this.$router.push({name: 'end'})
       }
     },
-    getUrl(){
-      return "https://localhost:8443/"+this.$route.params.name;
-    }
   },
   mounted(){
   }

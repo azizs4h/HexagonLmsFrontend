@@ -14,7 +14,7 @@
         >
           <v-row>
             <v-col>
-              <h1 class="text-center">Ders Bitti</h1>
+              <h1 class="text-center">Ders Sona Erdi.</h1>
             </v-col>
           </v-row>
           <v-row>

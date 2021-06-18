@@ -1,6 +1,33 @@
 <template>
   <v-tab-item>
     <v-container>
+      <div class="text-center">
+        <v-snackbar
+            v-model="snackbar"
+            :timeout="timeout"
+            absolute
+            left
+            top
+            :multi-line="true"
+            :vertical="true"
+            color="blue-gray"
+            elevation="24"
+            transition="scroll-x-transition"
+        >
+          Ders Bulunamadı.
+
+          <template v-slot:action="{ attrs }">
+            <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar = false"
+            >
+              Kapat
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </div>
       <br>
       <v-row v-if="student == 'false'"
              class="ma-auto px-10 justify-end"
@@ -60,16 +87,9 @@
           class="ma-auto px-10"
           v-else
       >
-        <v-row>
-          <h2 class="font-weight-bold text-center text-uppercase">
-            Canlı Ders
-          </h2>
-          <hr>
-        </v-row>
-
         <v-col class="text-right">
           <v-btn
-              @click="$router.push({ name: 'meet', params: { name : lesson_id} })"
+              @click="goToLesson()"
               class="text-uppercase"
               color="primary"
           >
@@ -115,6 +135,7 @@
           </v-card>
         </v-col>
       </v-row>
+
     </v-container>
   </v-tab-item>
 </template>
@@ -135,6 +156,8 @@ export default {
     last_lesson:'',
     lesson_id: '',
     student: localStorage.getItem('is_student'),
+    snackbar: false,
+    timeout: 3000,
   }),
   methods: {
 
@@ -187,6 +210,12 @@ export default {
       var clock = str.substring(str.lastIndexOf("T")+1,str.lastIndexOf("T")+6);
       var date = str.substring(0,str.lastIndexOf("T"));
       return clock+" "+date;
+    },
+    goToLesson(){
+      if(this.lesson_id !=='')
+        this.$router.push({ name: 'meet', params: { name : this.lesson_id} });
+      else
+        this.snackbar=true;
     }
 
   },
